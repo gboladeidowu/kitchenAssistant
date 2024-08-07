@@ -1,0 +1,36 @@
+@media (max-width: 991px) {
+    .navbar-collapse {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 75%;  /* Sidebar width on smaller screens */
+        background-color: #343a40;  /* Bootstrap dark background */
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+    }
+
+    .navbar-expand-lg .navbar-collapse.show {
+        transform: translateX(0);
+    }
+
+    .navbar-expand-lg .navbar-toggler {
+        display: block;
+    }
+
+    .nav-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1040; /* Below the sidebar but above other content */
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-collapse {
+        transform: none !important;  /* Disable transformation for larger screens */
+    }
+}

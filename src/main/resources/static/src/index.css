@@ -1,0 +1,30 @@
+.offcanvas-body {
+    font-family: 'Arial', sans-serif; /* Or any other modern font */
+    font-size: 16px; /* Adjust size as necessary for readability */
+}
+
+.nav-link {
+    padding: 12px 15px; /* Larger padding for easier touch */
+    /* color: #f8f9fa; Light color for dark backgrounds */
+}
+
+.nav-link:hover, .nav-link:focus {
+    /* color: #ffc107; Highlight color on hover or focus */
+}
+
+
+
+
+/* Styling Timetable.js in response to trying to manage long meal names */
+.cell-content {
+    max-width: 150px; /* Adjust based on your table layout */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+
+
+
+

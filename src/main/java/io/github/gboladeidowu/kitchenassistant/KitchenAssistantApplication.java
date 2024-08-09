@@ -2,7 +2,6 @@ package io.github.gboladeidowu.kitchenassistant;
 
 import io.github.gboladeidowu.kitchenassistant.model.Timetable;
 import io.github.gboladeidowu.kitchenassistant.repository.TimetableRepository;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,22 +18,23 @@ public class KitchenAssistantApplication {
         SpringApplication.run(KitchenAssistantApplication.class, args);
     }
 
-
-   /* @Bean
-    CommandLineRunner commandLineRunner(TimetableRepository timetableRepository, List<Timetable> timetables) {
+    @Bean
+    CommandLineRunner commandLineRunner(TimetableRepository timetableRepository) {
         return args -> {
-            Timetable monday = new Timetable("Monday",null,null,null);
-            Timetable tuesday = new Timetable("Tuesday",null,null,null);
-            Timetable wednesday = new Timetable("Wednesday",null,null,null);
-            Timetable thursday = new Timetable("Thursday",null,null,null);
-            Timetable friday = new Timetable("Friday",null,null,null);
-            Timetable saturday = new Timetable("Saturday",null,null,null);
-            Timetable sunday = new Timetable("Sunday",null,null,null);
+            List<Timetable> timetable = new ArrayList<>();
+            List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+            for (String day : days) {
+                if (!timetableRepository.existsByDayIgnoreCase(day)) {
+                    Timetable weekDay = new Timetable();
+                    weekDay.setDay(day);
+                    timetable.add(weekDay);
+                }
+            }
 
-            List<Timetable> days = new ArrayList<>(Arrays.asList(monday,tuesday,wednesday,thursday,friday,saturday,sunday));
+            if (!timetable.isEmpty()) {
+                timetableRepository.saveAll(timetable);
+            }
 
-            timetableRepository.saveAll(days);
         };
     }
-*/
 }

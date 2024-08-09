@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TimetableRepository extends JpaRepository<Timetable, Integer> {
+public interface TimetableRepository extends JpaRepository<Timetable, String> {
     Optional<Timetable> findByDayIgnoreCase(String day);
-    void deleteByDayIgnoreCase(String day);
+
+    boolean existsByDayIgnoreCase(String day);
 }

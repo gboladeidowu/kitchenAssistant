@@ -17,7 +17,7 @@ public class TimetableController {
 
     private final TimetableService timetableService;
 
-    @PostMapping("/{day}")
+    @PutMapping("/{day}")
     @ResponseStatus(HttpStatus.OK)
     public String saveMeal(@PathVariable String day, @RequestBody TimetableDTO timetableDTO) {
         timetableService.saveMeal(day, timetableDTO);

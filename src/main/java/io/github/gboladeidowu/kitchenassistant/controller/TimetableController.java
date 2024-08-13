@@ -12,19 +12,20 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/days")
+@RequestMapping("api/v1/timetable")
 public class TimetableController {
 
     private final TimetableService timetableService;
 
     @PutMapping("/{day}")
-    @ResponseStatus(HttpStatus.OK)
-    public String saveMeal(@PathVariable String day, @RequestBody TimetableDTO timetableDTO) {
-        timetableService.saveMeal(day, timetableDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    public String addMeal(@PathVariable String day, @RequestBody TimetableDTO timetableDTO) {
+        timetableService.addMeal(day, timetableDTO);
         return"Meal saved.";
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Timetable> getMeals(){
         return timetableService.getMeals();
     }

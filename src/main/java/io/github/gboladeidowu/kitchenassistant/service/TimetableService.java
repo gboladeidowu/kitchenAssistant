@@ -16,22 +16,38 @@ public class TimetableService {
 
     private final TimetableRepository timetableRepository;
 
-    //save meals
-    public void saveMeal(String day, TimetableDTO timetableDTO) {
-        Optional<Timetable> timetable = timetableRepository.findByDayIgnoreCase(day);
-        if (timetable.isPresent()) {
-            Timetable weekDay = timetable.get();
-                weekDay.setBreakfast(timetableDTO.breakfast());
-                weekDay.setLunch(timetableDTO.lunch());
-                weekDay.setDinner(timetableDTO.dinner());
+    //add meals
+    public void addMeal(String day, TimetableDTO timetableDTO) {
+        // Check if day exists in timetable
+        Optional<Timetable> existingTimetable = timetableRepository.findByDayIgnoreCase(day);
+        if (existingTimetable.isPresent()) {
+            // Capitalize first letter of meal
+            String capitalizedBreakFast = timetableDTO.breakfast().substring(0, 1).toUpperCase()
+                    + timetableDTO.breakfast().substring(1);
+            String capitalizedLunch = timetableDTO.lunch().substring(0, 1).toUpperCase()
+                    + timetableDTO.lunch().substring(1);
+            String capitalizedDinner = timetableDTO.dinner().substring(0, 1).toUpperCase()
+                    + timetableDTO.dinner().substring(1);
 
+            // Get existing inventory object
+            Timetable weekDay = existingTimetable.get();
+
+                // set values for meals
+                weekDay.setBreakfast(capitalizedBreakFast);
+                weekDay.setLunch(capitalizedLunch);
+                weekDay.setDinner(capitalizedDinner);
+
+                // Save timetable
                 timetableRepository.save(weekDay);
         }
-        else throw new IllegalStateException(String.format("Day: %s does not exist", day));
+        else {
+            throw new IllegalStateException(String.format("Day: %s does not exist", day));
+        }
     }
 
     //get all meals
     public List<Timetable> getMeals() {
+        // return all timetable
         return timetableRepository.findAll();
     }
 

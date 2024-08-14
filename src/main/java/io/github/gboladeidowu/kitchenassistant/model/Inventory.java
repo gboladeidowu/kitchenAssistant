@@ -18,12 +18,11 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    private InventoryDescription description;
+    private String description;
 
     private String recipeName;
 
     private Integer quantity;
 
-    private double unit;
+    private String unit;
 }

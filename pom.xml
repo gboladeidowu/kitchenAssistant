@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.github.gboladeidowu</groupId>
-    <artifactId>KitchenAssistant</artifactId>
+    <artifactId>kitchen-assistant</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>KitchenAssistant</name>
-    <description>KitchenAssistant</description>
+    <name>kitchen-assistant</name>
+    <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>
         <license/>

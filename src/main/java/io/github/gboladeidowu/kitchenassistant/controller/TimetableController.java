@@ -2,7 +2,6 @@ package io.github.gboladeidowu.kitchenassistant.controller;
 
 
 import io.github.gboladeidowu.kitchenassistant.dto.TimetableDTO;
-import io.github.gboladeidowu.kitchenassistant.model.Timetable;
 import io.github.gboladeidowu.kitchenassistant.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,7 @@ public class TimetableController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Timetable> getMeals(){
+    public List<TimetableDTO> getMeals(){
         return timetableService.getMeals();
     }
 }

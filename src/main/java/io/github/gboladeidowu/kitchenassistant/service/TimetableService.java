@@ -19,23 +19,14 @@ public class TimetableService {
     //add meals
     public void addMeal(String day, TimetableDTO timetableDTO) {
         // Check if day exists in timetable
-        Optional<Timetable> existingTimetable = timetableRepository.findByDayIgnoreCase(day);
+        Optional<Timetable> existingTimetable = timetableRepository.findByDay(day.toLowerCase());
         if (existingTimetable.isPresent()) {
-            // Capitalize first letter of meal
-            String capitalizedBreakFast = timetableDTO.breakfast().substring(0, 1).toUpperCase()
-                    + timetableDTO.breakfast().substring(1);
-            String capitalizedLunch = timetableDTO.lunch().substring(0, 1).toUpperCase()
-                    + timetableDTO.lunch().substring(1);
-            String capitalizedDinner = timetableDTO.dinner().substring(0, 1).toUpperCase()
-                    + timetableDTO.dinner().substring(1);
-
             // Get existing inventory object
             Timetable weekDay = existingTimetable.get();
-
                 // set values for meals
-                weekDay.setBreakfast(capitalizedBreakFast);
-                weekDay.setLunch(capitalizedLunch);
-                weekDay.setDinner(capitalizedDinner);
+                weekDay.setBreakfast(timetableDTO.breakfast().toLowerCase());
+                weekDay.setLunch(timetableDTO.lunch().toLowerCase());
+                weekDay.setDinner(timetableDTO.dinner().toLowerCase());
 
                 // Save timetable
                 timetableRepository.save(weekDay);
@@ -46,9 +37,27 @@ public class TimetableService {
     }
 
     //get all meals
-    public List<Timetable> getMeals() {
+    public List<TimetableDTO> getMeals() {
         // return all timetable
-        return timetableRepository.findAll();
+        return timetableRepository.findAll()
+                .stream().map(this::mapToTimetableDTO).toList();
+    }
+
+    private TimetableDTO mapToTimetableDTO(Timetable timetable){
+        // Capitalize first letters of meal
+        String capitalizedBreakfast = timetable.getBreakfast().substring(0,1).toUpperCase()
+                + timetable.getBreakfast().substring(1);
+        String capitalizedLunch = timetable.getLunch().substring(0,1).toUpperCase()
+                + timetable.getLunch().substring(1);
+        String capitalizedDinner = timetable.getDinner().substring(0,1).toUpperCase()
+                + timetable.getDinner().substring(1);
+
+        // Return new TimetableDTO
+        return TimetableDTO.builder()
+                .breakfast(capitalizedBreakfast)
+                .lunch(capitalizedLunch)
+                .dinner(capitalizedDinner)
+                .build();
     }
 
 }

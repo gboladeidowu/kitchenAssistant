@@ -9,7 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface TimetableRepository extends JpaRepository<Timetable, String> {
-    Optional<Timetable> findByDayIgnoreCase(String day);
 
-    boolean existsByDayIgnoreCase(String day);
+    Optional<Timetable> findByDay(String day);
+
+    boolean existsByDay(String day);
+
 }

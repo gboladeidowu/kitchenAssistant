@@ -1,7 +1,7 @@
 package io.github.gboladeidowu.kitchenassistant.controller;
 
 
-import io.github.gboladeidowu.kitchenassistant.dto.TimetableDTO;
+import io.github.gboladeidowu.kitchenassistant.dto.TimetableDto;
 import io.github.gboladeidowu.kitchenassistant.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,14 +18,14 @@ public class TimetableController {
 
     @PutMapping("/{day}")
     @ResponseStatus(HttpStatus.CREATED)
-    public String addMeal(@PathVariable String day, @RequestBody TimetableDTO timetableDTO) {
+    public String addMeal(@PathVariable String day, @RequestBody TimetableDto timetableDTO) {
         timetableService.addMeal(day, timetableDTO);
         return"Meal saved.";
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TimetableDTO> getMeals(){
+    public List<TimetableDto> getMeals(){
         return timetableService.getMeals();
     }
 }

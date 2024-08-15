@@ -1,7 +1,7 @@
 package io.github.gboladeidowu.kitchenassistant.service;
 
 
-import io.github.gboladeidowu.kitchenassistant.dto.TimetableDTO;
+import io.github.gboladeidowu.kitchenassistant.dto.TimetableDto;
 import io.github.gboladeidowu.kitchenassistant.model.Timetable;
 import io.github.gboladeidowu.kitchenassistant.repository.TimetableRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class TimetableService {
     private final TimetableRepository timetableRepository;
 
     //add meals
-    public void addMeal(String day, TimetableDTO timetableDTO) {
+    public void addMeal(String day, TimetableDto timetableDTO) {
         // Check if day exists in timetable
         Optional<Timetable> existingTimetable = timetableRepository.findByDay(day.toLowerCase());
         if (existingTimetable.isPresent()) {
@@ -37,13 +37,13 @@ public class TimetableService {
     }
 
     //get all meals
-    public List<TimetableDTO> getMeals() {
+    public List<TimetableDto> getMeals() {
         // return all timetable
         return timetableRepository.findAll()
-                .stream().map(this::mapToTimetableDTO).toList();
+                .stream().map(this::mapToTimetableDto).toList();
     }
 
-    private TimetableDTO mapToTimetableDTO(Timetable timetable){
+    private TimetableDto mapToTimetableDto(Timetable timetable){
         // Capitalize first letters of meal
         String capitalizedBreakfast = timetable.getBreakfast().substring(0,1).toUpperCase()
                 + timetable.getBreakfast().substring(1);
@@ -53,7 +53,7 @@ public class TimetableService {
                 + timetable.getDinner().substring(1);
 
         // Return new TimetableDTO
-        return TimetableDTO.builder()
+        return TimetableDto.builder()
                 .breakfast(capitalizedBreakfast)
                 .lunch(capitalizedLunch)
                 .dinner(capitalizedDinner)

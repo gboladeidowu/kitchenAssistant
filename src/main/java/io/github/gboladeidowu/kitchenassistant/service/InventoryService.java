@@ -1,6 +1,6 @@
 package io.github.gboladeidowu.kitchenassistant.service;
 
-import io.github.gboladeidowu.kitchenassistant.dto.InventoryDTO;
+import io.github.gboladeidowu.kitchenassistant.dto.InventoryDto;
 import io.github.gboladeidowu.kitchenassistant.model.Inventory;
 import io.github.gboladeidowu.kitchenassistant.repository.InventoryRepository;
 import jakarta.transaction.Transactional;
@@ -19,7 +19,7 @@ public class InventoryService {
 
 
     //save inventory
-    public void saveInventory(String description, InventoryDTO inventoryDTO) {
+    public void saveInventory(String description, InventoryDto inventoryDTO) {
         // Check if an inventory item with the same recipe name already exists
         Optional<Inventory> existingInventory = inventoryRepository.findByDescription(description)
                 .stream()
@@ -57,7 +57,7 @@ public class InventoryService {
 
 
     //update inventory
-    public void updateInventory(String description, String recipeName, InventoryDTO inventoryDTO) {
+    public void updateInventory(String description, String recipeName, InventoryDto inventoryDTO) {
         // Check if inventory item with recipe name exists
         Optional<Inventory> existingInventory = inventoryRepository.findByDescription(description)
                 .stream()
@@ -93,15 +93,15 @@ public class InventoryService {
         }
     }
 
-    //map inventory to GetInventoryDTO
-    private InventoryDTO mapInventoryTODTO(Inventory inventory) {
+    //map inventory to InventoryDto
+    private InventoryDto mapToInventoryDto(Inventory inventory) {
         // Capitalize first letters of values
         String capitalizedRecipeName = inventory.getRecipeName().substring(0, 1).toUpperCase()
                 + inventory.getRecipeName().substring(1);
         String capitalizedUnit = inventory.getUnit().substring(0, 1).toUpperCase()
                 + inventory.getUnit().substring(1);
         // Return new GetInventoryDTO
-        return InventoryDTO.builder()
+        return InventoryDto.builder()
                 .recipeName(capitalizedRecipeName)
                 .quantity(inventory.getQuantity())
                 .unit(capitalizedUnit)
@@ -109,11 +109,11 @@ public class InventoryService {
     }
 
     //find all or by recipe name
-    public List<InventoryDTO> getByParam(String description, String recipeName) {
+    public List<InventoryDto> getByParam(String description, String recipeName) {
         // return inventory that matches the value for the query
         return inventoryRepository.findByDescription(description)
                 .stream()
                 .filter(inventory -> recipeName == null || inventory.getRecipeName().toLowerCase().contains(recipeName.toLowerCase()))
-                .map(this::mapInventoryTODTO).toList();
+                .map(this::mapToInventoryDto).toList();
     }
 }

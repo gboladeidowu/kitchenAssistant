@@ -1,7 +1,7 @@
 package io.github.gboladeidowu.kitchenassistant.controller;
 
 
-import io.github.gboladeidowu.kitchenassistant.dto.InventoryDTO;
+import io.github.gboladeidowu.kitchenassistant.dto.InventoryDto;
 import io.github.gboladeidowu.kitchenassistant.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,14 +18,14 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @GetMapping("/{description}")
-    public List<InventoryDTO> getByParam(@PathVariable String description,
-                                          @RequestParam(required = false) String recipeName) {
+    public List<InventoryDto> getByParam(@PathVariable String description,
+                                         @RequestParam(required = false) String recipeName) {
         return inventoryService.getByParam(description, recipeName);
     }
 
     @PostMapping("/{description}")
     @ResponseStatus(HttpStatus.CREATED)
-    public String saveInventory(@PathVariable String description, @RequestBody InventoryDTO inventoryDTO) {
+    public String saveInventory(@PathVariable String description, @RequestBody InventoryDto inventoryDTO) {
         inventoryService.saveInventory(description, inventoryDTO);
         return "Inventory saved";
     }
@@ -34,7 +34,7 @@ public class InventoryController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public String updateInventory(@PathVariable String description,
                                   @PathVariable String recipeName,
-                                  @RequestBody InventoryDTO inventoryDTO) {
+                                  @RequestBody InventoryDto inventoryDTO) {
         inventoryService.updateInventory(description, recipeName, inventoryDTO);
         return "Inventory updated";
     }

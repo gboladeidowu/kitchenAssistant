@@ -109,11 +109,13 @@ public class InventoryService {
     }
 
     //find all or by recipe name
-    public List<InventoryDto> getByParam(String description, String recipeName) {
+    public List<InventoryDto> getByParam(String description, String param) {
         // return inventory that matches the value for the query
         return inventoryRepository.findByDescription(description)
                 .stream()
-                .filter(inventory -> recipeName == null || inventory.getRecipeName().toLowerCase().contains(recipeName.toLowerCase()))
+                .filter(inventory -> param == null
+                        || inventory.getRecipeName().toLowerCase().contains(param.toLowerCase())
+                || inventory.getUnit().toLowerCase().contains(param.toLowerCase()))
                 .map(this::mapToInventoryDto).toList();
     }
 }

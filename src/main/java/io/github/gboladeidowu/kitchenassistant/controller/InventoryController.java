@@ -19,8 +19,8 @@ public class InventoryController {
 
     @GetMapping("/{description}")
     public List<InventoryDto> getByParam(@PathVariable String description,
-                                         @RequestParam(required = false) String param) {
-        return inventoryService.getByParam(description, param);
+                                      @RequestParam(required = false) String recipeName) {
+        return inventoryService.getByParam(description, recipeName);
     }
 
     @PostMapping("/{description}")

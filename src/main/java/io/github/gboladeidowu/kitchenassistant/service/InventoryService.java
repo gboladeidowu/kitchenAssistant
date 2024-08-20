@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
@@ -21,23 +20,19 @@ public class InventoryService {
     //save inventory
     public void saveInventory(String description, InventoryDto inventoryDTO) {
         // Check if an inventory item with the same recipe name already exists
-        Optional<Inventory> existingInventory = inventoryRepository.findByDescription(description)
-                .stream()
-                .filter(inventory -> inventory.getRecipeName().equalsIgnoreCase(inventoryDTO.recipeName()))
-                .findFirst();
+       boolean existingInventory = inventoryRepository.existsByDescriptionAndRecipeName(description,inventoryDTO.recipeName().toLowerCase());
 
-        if (existingInventory.isEmpty()) {
-            // Create a new inventory object
-            Inventory inventory = Inventory.builder()
-                    .recipeName(inventoryDTO.recipeName().toLowerCase())
-                    .quantity(inventoryDTO.quantity())
-                    .unit(inventoryDTO.unit().toLowerCase())
-                    .build();
+       if (!existingInventory) {
+           Inventory inventory = Inventory.builder()
+                   .recipeName(inventoryDTO.recipeName().toLowerCase())
+                   .quantity(inventoryDTO.quantity())
+                   .unit(inventoryDTO.unit().toLowerCase())
+                   .build();
 
             // Set description
-            switch (description) {
+            switch (description.toLowerCase()) {
                 case "cooked":
-                    inventory.setDescription("cooked");
+                  inventory.setDescription("cooked");
                     break;
 
                 case "uncooked":
@@ -48,10 +43,12 @@ public class InventoryService {
             }
             // Save the new inventory object
             inventoryRepository.save(inventory);
-        } else {
+        }
+
+       else {
             // Throw an exception if the inventory item already exists
             throw new IllegalStateException(String.format("Inventory with recipe name: '%s' already exists. " +
-                    "Choose another name or update the quantity/unit", inventoryDTO.recipeName()));
+                "Choose another name or update the quantity/unit", inventoryDTO.recipeName()));
         }
     }
 
@@ -59,38 +56,26 @@ public class InventoryService {
     //update inventory
     public void updateInventory(String description, String recipeName, InventoryDto inventoryDTO) {
         // Check if inventory item with recipe name exists
-        Optional<Inventory> existingInventory = inventoryRepository.findByDescription(description)
-                .stream()
-                .filter(inventory -> inventory.getRecipeName().equalsIgnoreCase(recipeName))
-                .findFirst();
+        Inventory existingInventory = inventoryRepository.findByDescriptionAndRecipeName(description, recipeName.toLowerCase())
+                .orElseThrow(() -> new IllegalStateException(String.format("Inventory with recipe name: '%s' does not exist in %s inventory.", recipeName, description)));
 
-        if (existingInventory.isPresent()) {
-            // Get existing inventory object
-            Inventory inventory = existingInventory.get();
             // Use setters to set new values
-            inventory.setRecipeName(inventoryDTO.recipeName().toLowerCase());
-            inventory.setQuantity(inventoryDTO.quantity());
-            inventory.setUnit(inventoryDTO.unit().toLowerCase());
+            existingInventory.setRecipeName(inventoryDTO.recipeName().toLowerCase());
+            existingInventory.setQuantity(inventoryDTO.quantity());
+            existingInventory.setUnit(inventoryDTO.unit().toLowerCase());
 
             // Save updated inventory object
-            inventoryRepository.save(inventory);
-        } else {
-            throw new IllegalStateException(String.format("Inventory with recipe name: '%s' does not exist.", recipeName));
-        }
+            inventoryRepository.save(existingInventory);
     }
 
 
     //delete inventory
     public void deleteInventory(String description, String recipeName) {
-        Optional<Inventory> existingInventory = inventoryRepository.findByDescription(description)
-                .stream()
-                .filter(inventory -> inventory.getRecipeName().equalsIgnoreCase(recipeName)).findFirst();
+       Inventory existingInventory = inventoryRepository.findByDescriptionAndRecipeName(description, recipeName)
+               .orElseThrow(() -> new  IllegalStateException(String.format("Recipe with name: '%s' does not exist in %s inventory.", recipeName, description)));
 
-        if (existingInventory.isPresent()) {
-            inventoryRepository.deleteByRecipeName(recipeName.toLowerCase());
-        } else {
-            throw new IllegalStateException(String.format("Recipe: '%s' does not exist.", recipeName));
-        }
+       inventoryRepository.delete(existingInventory);
+
     }
 
     //map inventory to InventoryDto
@@ -109,13 +94,13 @@ public class InventoryService {
     }
 
     //find all or by recipe name
-    public List<InventoryDto> getByParam(String description, String param) {
+    public List<InventoryDto> getByParam(String description, String recipeName) {
         // return inventory that matches the value for the query
-        return inventoryRepository.findByDescription(description)
+        return inventoryRepository
+                .findByDescription(description)
                 .stream()
-                .filter(inventory -> param == null
-                        || inventory.getRecipeName().toLowerCase().contains(param.toLowerCase())
-                || inventory.getUnit().toLowerCase().contains(param.toLowerCase()))
+                .filter(existingInventory -> recipeName == null || existingInventory.getRecipeName().toLowerCase()
+                        .contains(recipeName.toLowerCase()))
                 .map(this::mapToInventoryDto).toList();
     }
 }

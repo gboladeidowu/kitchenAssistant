@@ -24,16 +24,14 @@ public class KitchenAssistantApplication {
             List<Timetable> timetable = new ArrayList<>();
             List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
             for (String day : days) {
-                if (!timetableRepository.existsByDay(day.toLowerCase())) {
-                    Timetable weekDay = new Timetable();
-                    weekDay.setDay(day.toLowerCase());
-                    timetable.add(weekDay);
+                if (timetableRepository.findByDay(day.toLowerCase()).isPresent()) {
+                    return;
                 }
+                Timetable weekDay = new Timetable();
+                weekDay.setDay(day.toLowerCase());
+                timetable.add(weekDay);
             }
-
-            if (!timetable.isEmpty()) {
-                timetableRepository.saveAll(timetable);
-            }
+            timetableRepository.saveAll(timetable);
 
         };
     }

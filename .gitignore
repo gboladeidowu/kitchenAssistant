@@ -2,7 +2,6 @@
 mvnw
 mvnw.cmd
 qodana.yaml
-HELP.md
 target/
 !.mvn/wrapper/
 !**/src/main/**/target/

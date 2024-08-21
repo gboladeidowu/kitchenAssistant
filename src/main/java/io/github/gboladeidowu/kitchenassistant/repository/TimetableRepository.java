@@ -12,6 +12,4 @@ public interface TimetableRepository extends JpaRepository<Timetable, String> {
 
     Optional<Timetable> findByDay(String day);
 
-    boolean existsByDay(String day);
-
 }

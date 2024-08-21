@@ -24,9 +24,9 @@ public class KitchenAssistantApplication {
             List<Timetable> timetable = new ArrayList<>();
             List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
             for (String day : days) {
-                if (timetableRepository.findByDay(day.toLowerCase()).isPresent()) {
+                if (timetableRepository.findByDay(day.toLowerCase()).isPresent())
                     return;
-                }
+
                 Timetable weekDay = new Timetable();
                 weekDay.setDay(day.toLowerCase());
                 timetable.add(weekDay);
